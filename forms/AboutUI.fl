@@ -3,12 +3,12 @@ version 1.0304
 header_name {.h}
 code_name {.cxx}
 widget_class AboutUI {
-  label About open selected
+  label About open
   xywh {881 440 400 340} type Double
   class Fl_Double_Window modal xclass {psdebug.about} visible
 } {
   Fl_Box {} {
-    label {The Open Source PlayStation Debuggubg Tool}
+    label {The Open Source PlayStation Debugging Tool}
     xywh {10 125 380 32} box ENGRAVED_BOX labelfont 1 labelsize 16 align 16
   }
   Fl_Box {} {
@@ -17,7 +17,7 @@ widget_class AboutUI {
 Great thanks to nocash for his extensive documentation of the PlayStation hardware.
 
 This tool is still a work in progress. Please report any significat issues to this project's Github page at:
-https://github.com/Lameguy64/psn00b-debug}
+https://github.com/Lameguy64/PSn00b-Debugger}
     xywh {10 167 380 134} box DOWN_BOX labelsize 12 align 149
   }
   Fl_Return_Button {} {

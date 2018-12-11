@@ -19,6 +19,8 @@ While not as powerful as the official debugging tools that worked with official 
 ## Usage Notes
 When running the debugger for the first time you must specify the debug patch binary at in the Debugger Settings. This file should be included with the binary download and is typically named pspatch.bin. If you don't specify this file all debugging functionality on the console side will not work.
 
+This debugger only works with LITELOAD 1.1 and newer which you can find binaries of in the [psxdev forums](http://www.psxdev.net/forum/viewtopic.php?f=75&t=1555 ).
+
 ## To-do list
 * Rewrite debugger code to GNU assembler.
 * View GTE registers.

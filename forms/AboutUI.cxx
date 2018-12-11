@@ -2964,7 +2964,7 @@ this->labelsize(14);
 this->labelcolor(FL_FOREGROUND_COLOR);
 this->align(Fl_Align(FL_ALIGN_TOP));
 this->when(FL_WHEN_RELEASE);
-{ Fl_Box* o = new Fl_Box(10, 125, 380, 32, "The Open Source PlayStation Debuggubg Tool");
+{ Fl_Box* o = new Fl_Box(10, 125, 380, 32, "The Open Source PlayStation Debugging Tool");
   o->box(FL_ENGRAVED_BOX);
   o->labelfont(1);
   o->labelsize(16);
@@ -2973,7 +2973,7 @@ this->when(FL_WHEN_RELEASE);
 { Fl_Box* o = new Fl_Box(10, 167, 380, 134, "By Lameguy64 of Meido-Tek Productions\n\nGreat thanks to nocash for his exten\
 sive documentation of the PlayStation hardware.\n\nThis tool is still a work i\
 n progress. Please report any significat issues to this project\'s Github page\
- at:\nhttps://github.com/Lameguy64/psn00b-debug");
+ at:\nhttps://github.com/Lameguy64/PSn00b-Debugger");
   o->box(FL_DOWN_BOX);
   o->labelsize(12);
   o->align(Fl_Align(133|FL_ALIGN_INSIDE));
