@@ -1,0 +1,36 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0304
+header_name {.h}
+code_name {.cxx}
+widget_class MemDumpUI {
+  label {Memory Dumper} open
+  xywh {516 324 265 145} type Double labelsize 12
+  class Fl_Double_Window visible
+} {
+  Fl_Group {} {open
+    xywh {10 10 245 95} box THIN_UP_BOX
+  } {
+    Fl_Input dumpAddress {
+      label {Address (in hex)} selected
+      xywh {115 24 130 21} labelsize 12 textsize 12 hotspot
+    }
+    Fl_Input dumpLength {
+      label {Length (in bytes)}
+      xywh {115 50 130 21} labelsize 12 textsize 12
+    }
+    Fl_Check_Button noAddrCheck {
+      label {Ignore address check}
+      xywh {20 80 225 15} down_box DOWN_BOX labelsize 12
+    }
+  }
+  Fl_Button {} {
+    label Close
+    callback cb_MemDumpClose
+    xywh {185 115 70 20} labelsize 12
+  }
+  Fl_Return_Button {} {
+    label Dump
+    callback cb_MemDumpGo
+    xywh {105 115 70 20} labelsize 12
+  }
+}

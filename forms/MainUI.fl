@@ -1,0 +1,293 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0304
+header_name {.h}
+code_name {.cxx}
+widget_class MainUI {
+  label {PSn00b Debugger} open
+  xywh {594 203 600 600} type Double resizable hotspot
+  code0 {\#include "Main_Window.h"}
+  class Main_Window xclass {psdebug.main} visible
+} {
+  Fl_Menu_Bar {} {open selected
+    xywh {0 0 600 20}
+  } {
+    Submenu {} {
+      label {&File}
+      xywh {0 0 62 20} labelsize 12
+    } {
+      MenuItem {} {
+        label {&New Project}
+        callback cb_NewProject
+        xywh {0 0 30 20} shortcut 0x4006e labelsize 12
+      }
+      MenuItem {} {
+        label {&Open Project...}
+        callback cb_OpenProject
+        xywh {0 0 30 20} shortcut 0x4006f labelsize 12
+      }
+      MenuItem {} {
+        label {&Save Project...}
+        callback cb_SaveProject
+        xywh {0 0 30 20} shortcut 0x40073 labelsize 12
+      }
+      MenuItem {} {
+        label {Save Project &As...}
+        callback cb_SaveProjectAs
+        xywh {0 0 30 20} labelsize 12
+      }
+      MenuItem {} {
+        label {&Reload}
+        callback cb_ReloadProject
+        xywh {0 0 30 20} shortcut 0x40072 labelsize 12 divider
+      }
+      MenuItem {} {
+        label {Select &PS-EXE...}
+        callback cb_SelectExec
+        xywh {0 0 30 20} labelsize 12 divider
+      }
+      MenuItem {} {
+        label {&Exit}
+        callback cb_Exit
+        xywh {0 0 30 20} shortcut 0x8ffc1 labelsize 12
+      }
+    }
+    Submenu {} {
+      label {&Search} open
+      xywh {0 0 62 20} labelsize 12
+    } {
+      MenuItem {} {
+        label {Goto Address/Symbol...}
+        callback cb_GotoAddress
+        xywh {0 0 30 20} shortcut 0x40067 labelsize 12 divider
+      }
+      MenuItem {} {
+        label {Dump Memory...}
+        callback cb_DumpMemory
+        xywh {0 0 30 20} labelsize 12
+      }
+    }
+    Submenu {} {
+      label {&Debug} open
+      xywh {5 5 62 20} labelsize 12
+    } {
+      MenuItem {} {
+        label {&Run}
+        callback cb_ContinueM
+        xywh {0 0 30 20} shortcut 0xffc6 labelsize 12
+      }
+      MenuItem {} {
+        label {Step &Over}
+        callback cb_StepOverM
+        xywh {0 0 30 20} shortcut 0xffc5 labelsize 12
+      }
+      MenuItem {} {
+        label {&Step}
+        callback cb_StepM
+        xywh {0 0 30 20} shortcut 0xffc4 labelsize 12 divider
+      }
+      MenuItem {} {
+        label {&Debugger Settings...}
+        callback cb_DebugSettings
+        xywh {0 0 30 20} labelsize 12
+      }
+    }
+    Submenu {} {
+      label {&Window} open
+      xywh {5 5 62 20} labelsize 12
+    } {
+      MenuItem {} {
+        label {&Message Window...}
+        callback cb_MessageWindow
+        xywh {0 0 30 20} labelsize 12
+      }
+      MenuItem {} {
+        label {&Source Code...}
+        callback cb_SourceCode
+        xywh {0 0 30 20} labelsize 12
+      }
+      MenuItem {} {
+        label {S&ymbols...}
+        callback cb_Symbols
+        xywh {0 0 30 20} labelsize 12
+      }
+      MenuItem {} {
+        label {&Bookmarks...}
+        callback cb_Bookmarks
+        xywh {0 0 30 20} labelsize 12
+      }
+      MenuItem {} {
+        label {&Memory...}
+        callback cb_MemoryView
+        xywh {0 0 30 20} labelsize 12
+      }
+    }
+    MenuItem {} {
+      label {&About}
+      callback cb_About
+      xywh {0 0 30 20} labelsize 12
+    }
+  }
+  Fl_Group {} {open
+    xywh {0 20 600 40}
+  } {
+    Fl_Group execControls {open
+      xywh {5 25 150 30} deactivate
+    } {
+      Fl_Button stopButton {
+        callback cb_Pause
+        tooltip Stop image {../icons/stop.png} deimage {../icons/stop_inactive.png} xywh {5 25 30 30}
+      }
+      Fl_Button stepButton {
+        callback cb_Step
+        tooltip Step image {../icons/step.png} deimage {../icons/step_inactive.png} xywh {35 25 30 30} deactivate
+      }
+      Fl_Button stepOverButton {
+        callback cb_StepOver
+        tooltip {Step Over} image {../icons/stepover.png} deimage {../icons/stepover_inactive.png} xywh {65 25 30 30} deactivate
+      }
+      Fl_Button runButton {
+        callback cb_Continue
+        tooltip Run image {../icons/run.png} deimage {../icons/run_inactive.png} xywh {125 25 30 30}
+      }
+      Fl_Button stepOutButton {
+        callback cb_StepOut
+        tooltip {Step Out} image {../icons/stepout.png} deimage {../icons/stepout_inactive.png} xywh {95 25 30 30} deactivate
+      }
+    }
+    Fl_Button uploadButton {
+      callback cb_Upload
+      tooltip {Upload to Console} image {../icons/upload.png} deimage {../icons/upload_inactive.png} xywh {160 25 30 30} deactivate
+    }
+    Fl_Button rebootButton {
+      callback cb_Reboot
+      tooltip {Reboot Console} image {../icons/reboot.png} deimage {../icons/reboot_inactive.png} xywh {190 25 30 30} deactivate
+    }
+    Fl_Button connectButton {
+      callback cb_commConnect
+      tooltip {Manual Connect} image {../icons/connect.png} deimage {../icons/connect_inactive.png} xywh {225 25 30 30}
+    }
+    Fl_Button disconnectButton {
+      callback cb_commDisconnect
+      tooltip Disconnect image {../icons/disconnect.png} deimage {../icons/disconnec_inactive.png} xywh {255 25 30 30} deactivate
+    }
+    Fl_Group dummy {open
+      xywh {290 25 305 30} resizable
+    } {}
+  }
+  Fl_Tile {} {open
+    xywh {0 60 600 523} resizable
+  } {
+    Fl_Group {} {open
+      xywh {0 60 600 174} box DOWN_BOX
+    } {
+      Fl_Group registers {
+        label Registers open
+        xywh {5 79 590 150} box DOWN_BOX color 55 labelsize 12 align 5 resizable
+        code0 {\#include "Fl_RegView.h"}
+        class Fl_RegView
+      } {}
+      Fl_Group {} {open
+        xywh {5 64 590 15}
+      } {
+        Fl_Button regRefresh {
+          label Refresh
+          callback cb_RefreshRegs
+          xywh {545 64 50 15} labelsize 10 deactivate
+        }
+        Fl_Group {} {open
+          xywh {5 64 100 15} resizable
+        } {}
+      }
+    }
+    Fl_Group {} {open
+      xywh {0 234 600 349} box DOWN_BOX
+    } {
+      Fl_Group {} {open
+        xywh {5 238 595 16}
+      } {
+        Fl_Group {} {open
+          xywh {5 239 325 14} resizable
+        } {}
+        Fl_Group {} {open
+          xywh {460 239 80 15}
+        } {
+          Fl_Light_Button localMode {
+            label CPE
+            user_data 0 user_data_type long
+            callback cb_DataView
+            tooltip {Browse disassembly from local executable file.} xywh {460 239 40 15} type Radio value 1 labelsize 10
+          }
+          Fl_Light_Button remoteMode {
+            label RAM
+            user_data 1 user_data_type long
+            callback cb_DataView
+            tooltip {Browse disassembly from remote console's memory.} xywh {500 239 40 15} type Radio labelsize 10 deactivate
+          }
+        }
+        Fl_Button codeRefresh {
+          label Refresh
+          callback cb_RefreshCode
+          tooltip {Refresh disassembly data.} xywh {545 239 50 15} labelsize 10 deactivate
+        }
+      }
+      Fl_Group disasm {
+        label Disassembly
+        callback cb_Disassembly open
+        xywh {5 254 590 324} box DOWN_BOX color 55 labelsize 12 align 5 resizable
+        code0 {\#include "Fl_Disassembler.h"}
+        class Fl_Disassembler
+      } {}
+    }
+  }
+  Fl_Box statusBar {
+    xywh {0 583 600 17} box THIN_UP_BOX labelsize 12
+    code0 {\#include "Fl_Status_Bar.h"}
+    class Fl_Status_Bar
+  }
+}
+
+widget_class ProgressUI {
+  label Progress open
+  xywh {8 30 300 100} type Double
+  class Fl_Double_Window modal xclass {psdebug.progress} visible
+} {
+  Fl_Group {} {open
+    xywh {10 10 280 55} box ENGRAVED_FRAME
+  } {
+    Fl_Progress progressBar {
+      xywh {20 35 260 20} selection_color 136
+    }
+    Fl_Box progressText {
+      label {< insert text here >}
+      xywh {20 20 260 16} labelsize 12 align 20
+    }
+  }
+  Fl_Button cancelButton {
+    label Cancel
+    xywh {226 70 64 20} labelsize 12 hotspot
+  }
+}
+
+widget_class AddressUI {
+  label {Goto Address} open
+  xywh {8 30 327 64} type Double
+  class Fl_Double_Window modal visible
+} {
+  Fl_Input addressInput {
+    xywh {10 34 230 21} labelsize 12 align 5 textsize 12
+  }
+  Fl_Return_Button {} {
+    label Ok
+    callback cb_AddressOk
+    xywh {250 10 68 20} labelsize 12 hotspot
+  }
+  Fl_Button {} {
+    label Cancel
+    callback cb_AddressCancel
+    xywh {250 35 68 20} labelsize 12
+  }
+  Fl_Box {} {
+    label {Enter address, register or symbol name:}
+    xywh {10 10 230 16} labelsize 12 align 20
+  }
+}

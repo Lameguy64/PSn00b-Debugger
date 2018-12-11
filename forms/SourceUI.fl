@@ -1,0 +1,24 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0304
+header_name {.h}
+code_name {.cxx}
+widget_class SourceUI {
+  label {Source Code} open selected
+  xywh {604 195 540 540} type Double hide resizable
+  class Fl_Double_Window xclass {psdebug.source}
+} {
+  Fl_Group {} {open
+    xywh {0 0 601 20}
+  } {
+    Fl_Choice sourceFileChoice {
+      label File open
+      xywh {28 0 512 20} down_box BORDER_BOX labelsize 12 textsize 12 resizable
+    } {}
+  }
+  Fl_Browser sourceBrowser {
+    callback cb_sourceBrowser
+    xywh {0 20 540 520} type Hold textfont 4 textsize 12 resizable
+    code0 {\#include "Fl_Source_Browser.h"}
+    class Fl_Source_Browser
+  }
+}

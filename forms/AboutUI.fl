@@ -1,0 +1,35 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0304
+header_name {.h}
+code_name {.cxx}
+widget_class AboutUI {
+  label About open selected
+  xywh {881 440 400 340} type Double
+  class Fl_Double_Window modal xclass {psdebug.about} visible
+} {
+  Fl_Box {} {
+    label {The Open Source PlayStation Debuggubg Tool}
+    xywh {10 125 380 32} box ENGRAVED_BOX labelfont 1 labelsize 16 align 16
+  }
+  Fl_Box {} {
+    label {By Lameguy64 of Meido-Tek Productions
+
+Great thanks to nocash for his extensive documentation of the PlayStation hardware.
+
+This tool is still a work in progress. Please report any significat issues to this project's Github page at:
+https://github.com/Lameguy64/psn00b-debug}
+    xywh {10 167 380 134} box DOWN_BOX labelsize 12 align 149
+  }
+  Fl_Return_Button {} {
+    label Dismiss
+    callback {hide();}
+    xywh {300 310 90 20} labelsize 12
+  }
+  Fl_Box {} {
+    image {../icons/psdebug-banner.png} xywh {10 10 380 105} box DOWN_BOX
+  }
+  Fl_Box versionCaption {
+    label Version
+    xywh {10 310 170 20} labelsize 12 align 20
+  }
+}

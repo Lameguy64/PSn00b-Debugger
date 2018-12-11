@@ -1,0 +1,8 @@
+nbproject/private
+build
+dist
+symtest
+*.cfg
+*.bin
+*.map
+.dep.inc

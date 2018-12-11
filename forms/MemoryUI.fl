@@ -1,0 +1,46 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0304
+header_name {.h}
+code_name {.cxx}
+widget_class MemoryUI {
+  label Memory open
+  xywh {704 283 400 400} type Double resizable
+  class Fl_Double_Window xclass {psdebug.memory} visible
+} {
+  Fl_Group {} {open
+    xywh {5 5 390 15}
+  } {
+    Fl_Button {} {
+      label Refresh
+      callback cb_MemoryRefresh
+      xywh {345 5 50 15} labelsize 10
+    }
+    Fl_Group {} {open
+      xywh {145 5 195 15} resizable
+    } {}
+    Fl_Light_Button {} {
+      label Int
+      user_data 0 user_data_type long
+      callback cb_MemoryMode
+      xywh {5 5 45 15} type Radio value 1 labelsize 10
+    }
+    Fl_Light_Button {} {
+      label Short
+      user_data 1 user_data_type long
+      callback cb_MemoryMode
+      xywh {50 5 45 15} type Radio labelsize 10
+    }
+    Fl_Light_Button {} {
+      label Byte
+      user_data 2 user_data_type long
+      callback cb_MemoryMode
+      xywh {95 5 45 15} type Radio labelsize 10
+    }
+  }
+  Fl_Group memory {
+    callback cb_Memory open selected
+    xywh {5 20 390 375} box DOWN_BOX color 55 labelsize 12 align 5 resizable
+    code0 {\#include "Fl_MemoryView.h"}
+    class Fl_MemoryView
+  } {}
+}

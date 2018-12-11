@@ -1,0 +1,103 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0304
+header_name {.h}
+code_name {.cxx}
+widget_class SettingsUI {
+  label {Debugger Settings} open
+  xywh {584 290 400 250} type Double
+  class Fl_Double_Window modal xclass {psdebug.settings} visible
+} {
+  Fl_Button {} {
+    label Ok
+    callback cb_SettingsOkay
+    tooltip cb_SettingsOk xywh {257 220 64 20} labelsize 12
+  }
+  Fl_Button {} {
+    label Cancel
+    callback {hide();}
+    xywh {326 220 64 20} labelsize 12
+  }
+  Fl_Tabs {} {open
+    xywh {10 10 385 200}
+  } {
+    Fl_Group {} {
+      label General open selected
+      xywh {10 30 380 180} labelsize 12
+    } {
+      Fl_Check_Button loadSymbolsCheck {
+        label {Always load symbols file when selecting PS-EXE}
+        tooltip {Loads a symbols file if available without asking.} xywh {20 40 365 15} down_box DOWN_BOX labelsize 12
+      }
+      Fl_Check_Button autoMinimizeCheck {
+        label {Auto minimize child windows}
+        tooltip {Minimize child windows when main window is minimized.} xywh {20 60 365 15} down_box DOWN_BOX labelsize 12
+      }
+      Fl_Check_Button symDissCheck {
+        label {Show Symbol names in disassembler}
+        xywh {20 80 365 15} down_box DOWN_BOX labelsize 12
+      }
+      Fl_Check_Button symMemCheck {
+        label {Show Symbol names in memory browser}
+        xywh {20 100 365 15} down_box DOWN_BOX labelsize 12
+      }
+    }
+    Fl_Group {} {
+      label Comms open
+      xywh {10 30 380 180} labelsize 12 hide
+    } {
+      Fl_Group {} {
+        label Communication open
+        xywh {20 55 365 40} box ENGRAVED_FRAME labelsize 12 align 5
+      } {
+        Fl_Input_Choice serialChoice {
+          label {Serial Port} open
+          xywh {90 64 285 21} labelsize 12 textsize 12
+        } {}
+      }
+    }
+    Fl_Group {} {
+      label Debugging open
+      xywh {10 30 385 180} labelsize 12 hide
+    } {
+      Fl_Check_Button bpcBreakToggle {
+        label {Pause program on entrypoint}
+        tooltip {Pauses the program at its entrypoint.} xywh {20 40 365 15} down_box DOWN_BOX labelsize 12
+      }
+      Fl_Check_Button ramExpEnable {
+        label {Allow RAM expansion browsing}
+        callback cb_SettingsExpToggle
+        tooltip {Allow browsing the contents of expansion region 3 starting at 0x1FA00000 which was intented for a RAM expansion cartridge on the Parallel I/O port. Memory registers on the console side may have to be configured first.} xywh {20 60 215 15} down_box DOWN_BOX labelsize 12
+      }
+      Fl_Value_Input ramExpSize {
+        label {RAM Size (KB)}
+        tooltip {Specifies the size of the installed RAM expansion.} xywh {326 60 59 15} labelsize 12 textsize 12 deactivate
+      }
+      Fl_Check_Button ram8mbEnable {
+        label {Allow 8MB RAM browsing}
+        tooltip {Allow browsing up to 8MB of RAM instead of 2MB for targets with 8MB of DRAM present. If only 2MB is present anything beyond 2MB mirrors the first 2MB.} xywh {20 80 365 15} down_box DOWN_BOX labelsize 12
+      }
+      Fl_Group {} {
+        label {Debug Patch File (for LITELOAD 1.1 or newer)} open
+        xywh {21 155 364 40} box ENGRAVED_FRAME labelsize 12 align 5
+      } {
+        Fl_Light_Button patchFileToggle {
+          label Enable
+          callback cb_SettingsPatchToggle
+          xywh {30 165 63 20} labelsize 12
+        }
+        Fl_Group patchGroup {open
+          xywh {95 164 279 21} deactivate
+        } {
+          Fl_Input patchFileInput {
+            xywh {102 164 239 21} labelsize 12 textsize 12
+          }
+          Fl_Button {} {
+            label {...}
+            callback cb_SettingsBrowsePatch
+            xywh {349 165 25 20} labelsize 12
+          }
+        }
+      }
+    }
+  }
+}

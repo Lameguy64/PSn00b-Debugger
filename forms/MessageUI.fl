@@ -1,0 +1,29 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0304
+header_name {.h}
+code_name {.cxx}
+widget_class MessageUI {
+  label {Message Window} open
+  xywh {818 397 400 250} type Double resizable
+  class Fl_Double_Window xclass {psdebug.mwin} visible
+} {
+  Fl_Menu_Bar {} {open selected
+    xywh {0 0 400 20} labelsize 12 textsize 12
+  } {
+    MenuItem {} {
+      label Clear
+      callback cb_MessageClear
+      xywh {0 0 30 20} labelsize 12
+    }
+  }
+  Fl_Text_Display logDisplay {
+    xywh {0 20 400 230} labelsize 12 textfont 4 textsize 12 resizable
+  }
+  decl {Fl_Text_Buffer *text;} {public local
+  }
+  Function {init_text()} {open
+  } {
+    code {text = new Fl_Text_Buffer;
+logDisplay->buffer( text );} {}
+  }
+}
