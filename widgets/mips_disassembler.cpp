@@ -242,7 +242,7 @@ void mips_Decode(unsigned int opcode, unsigned int addr, char* output, int arrow
 		nullptr		,nullptr	,"slt     "	,"sltu    "	,	//38
 	};
 	
-	strcpy(output, "???");
+	strcpy( output, "???" );
 	
 	if( opcode ) {
 		
@@ -262,8 +262,8 @@ void mips_Decode(unsigned int opcode, unsigned int addr, char* output, int arrow
 				case 0x6:
 				case 0x7:
 					strcpy( output, sc_op[OPCODE2(opcode)] );
-					sprintf( temp, "%s, %s, %s", regs[OPREGS(opcode)],
-						regs[OPREGD(opcode)], regs[OPREGT(opcode)] );
+					sprintf( temp, "%s, %s, %s", regs[OPREGT(opcode)],
+						regs[OPREGD(opcode)], regs[OPREGS(opcode)] );
 					strcat( output, temp );
 					break;
 				case 0x8:	// jr
@@ -313,7 +313,7 @@ void mips_Decode(unsigned int opcode, unsigned int addr, char* output, int arrow
 					if( ( OPCODE2(opcode) >= 0x20 ) && ( OPCODE2(opcode) <= 0x27 ) ) {
 						strcpy( output, sc_op[OPCODE2(opcode)] );
 						sprintf( temp, "%s, %s, %s", regs[OPREGD(opcode)],
-							regs[OPREGS(opcode)], regs[OPREGT(opcode)] );
+							regs[OPREGT(opcode)], regs[OPREGS(opcode)] );
 						strcat( output, temp );
 					}
 					

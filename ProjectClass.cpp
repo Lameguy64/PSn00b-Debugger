@@ -106,7 +106,7 @@ int ProjectClass::Save(const char *filename) {
 	base->InsertEndChild( o );
 	
 	o = doc.NewElement( "memory_win" );
-	o->SetAttribute( "active", bmlist_ui->visible() );
+	o->SetAttribute( "active", mem_ui->visible() );
 	o->InsertEndChild( DumpWinPos( &doc, mem_ui->x(), mem_ui->y(), 
 		mem_ui->w(), mem_ui->h() ) );
 	base->InsertEndChild( o );

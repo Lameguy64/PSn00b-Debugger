@@ -47,5 +47,9 @@ Essential references if you wish to contribute to this project:
 [LSI L64360 datasheet (cop0 registers match the PSX's CPU)](https://www.digchip.com/datasheets/download_datasheet.php?id=488501&part-number=L64360 )
 
 ## Changelog
+**Version 0.26b (01/23/2019)**
+* Fixed memory browser appearing when loading a project when the bookmark window is shown.
+* Fixed incorrect register order in sllv, srlv and srav instructions.
+
 **Version 0.25b (12/11/2018)**
 * Initial beta release.

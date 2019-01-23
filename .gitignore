@@ -2,7 +2,9 @@ nbproject/private
 build
 dist
 symtest
+scrap
 *.cfg
 *.bin
 *.map
+*.exe
 .dep.inc

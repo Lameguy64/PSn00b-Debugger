@@ -13,7 +13,7 @@
 #include "MainUI.h"
 #include "AboutUI.h"
 
-#define VERSION "0.25b"
+#define VERSION "0.26b"
 
 extern MainUI* ui;
 
