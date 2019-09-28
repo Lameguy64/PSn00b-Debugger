@@ -8,17 +8,18 @@ widget_class AboutUI {
   class Fl_Double_Window modal xclass {psdebug.about} visible
 } {
   Fl_Box {} {
-    label {The Open Source PlayStation Debugging Tool}
-    xywh {10 125 380 32} box ENGRAVED_BOX labelfont 1 labelsize 16 align 16
+    label {The open-source on-hardware PS1 debugger} selected
+    tooltip {Only one of its kind that I'm aware of...} xywh {10 125 380 32} box ENGRAVED_BOX labelfont 1 labelsize 16 align 16
   }
   Fl_Box {} {
-    label {By Lameguy64 of Meido-Tek Productions
+    label {By John Wilbert Villamor (Lameguy64) of Meido-Tek Productions.
+Debug patch assembled using Kingcom's ARMIPS.
 
-Great thanks to nocash for his extensive documentation of the PlayStation hardware.
+Thanks to Martin Korth (nocash) for his PSX Specs document.
 
-This tool is still a work in progress. Please report any significat issues to this project's Github page at:
-https://github.com/Lameguy64/PSn00b-Debugger}
-    xywh {10 167 380 134} box DOWN_BOX labelsize 12 align 149
+This tool is still a work in progress, please report any major issues to this project's Github page at:
+https://github.com/lameguy64/psn00b-debugger}
+    tooltip {Those who hide my (real) name are full of garbage, regardless...} xywh {10 167 380 134} box DOWN_BOX labelsize 12 align 149
   }
   Fl_Return_Button {} {
     label Dismiss

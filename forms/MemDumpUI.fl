@@ -3,15 +3,15 @@ version 1.0304
 header_name {.h}
 code_name {.cxx}
 widget_class MemDumpUI {
-  label {Memory Dumper} open
+  label {Memory Dumper} open selected
   xywh {516 324 265 145} type Double labelsize 12
-  class Fl_Double_Window visible
+  class Fl_Double_Window modal xclass {psdebug.dump} visible
 } {
   Fl_Group {} {open
     xywh {10 10 245 95} box THIN_UP_BOX
   } {
     Fl_Input dumpAddress {
-      label {Address (in hex)} selected
+      label {Address (in hex)}
       xywh {115 24 130 21} labelsize 12 textsize 12 hotspot
     }
     Fl_Input dumpLength {

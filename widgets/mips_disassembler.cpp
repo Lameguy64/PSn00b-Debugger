@@ -10,6 +10,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include "mips_disassembler.h"
+#include "pstypes.h"
 
 #define OPCODE1(p)	( (p>>26)&0x3F )
 #define OPCODE2(p)	( p&0x3F )
@@ -473,8 +474,9 @@ void mips_Decode(unsigned int opcode, unsigned int addr, char* output, int arrow
 
 unsigned int mips_GetNextPc(unsigned int *regs, int stepover) {
 	
-	unsigned int dest = regs[36]+4;
-	unsigned int opcode = regs[37];
+	unsigned int dest = regs[PS_REG_epc]+4;
+	unsigned int opcode = regs[PS_REG_opcode];
+	unsigned int rv,rt;
 	
 	if( OPCODE1(opcode) == 0 ) {
 		
@@ -486,7 +488,10 @@ unsigned int mips_GetNextPc(unsigned int *regs, int stepover) {
 				
 			} else {
 				
-				dest = regs[OPREGS(opcode)];
+				if( OPREGS(opcode) == 0 )
+					dest = 0;
+				else
+					dest = regs[OPREGS(opcode)-1];
 				
 			}
 			
@@ -494,31 +499,36 @@ unsigned int mips_GetNextPc(unsigned int *regs, int stepover) {
 		
 	} else if( OPCODE1(opcode) == 1 ) {
 		
+		if( OPREGS(opcode) == 0 )
+			rv = 0;
+		else
+			rv = regs[OPREGS(opcode)-1];
+				
 		switch(OPREGT(opcode)) {
 			case 0x0:	// bltz
-				if ( (((int)0)|regs[OPREGS(opcode)]) < 0 ) {
-					dest = regs[36]+4+(EXTEND16(OPIMM16(opcode))*4);
+				if ( (((int)0)|rv) < 0 ) {
+					dest = regs[PS_REG_epc]+4+(EXTEND16(OPIMM16(opcode))*4);
 				} else {
 					dest += 4;
 				}
 				break;
 			case 0x1:	// bgez
-				if ( (((int)0)|regs[OPREGS(opcode)]) >= 0 ) {
-					dest = regs[36]+4+(EXTEND16(OPIMM16(opcode))*4);
+				if ( (((int)0)|rv) >= 0 ) {
+					dest = regs[PS_REG_epc]+4+(EXTEND16(OPIMM16(opcode))*4);
 				} else {
 					dest += 4;
 				}
 				break;
 			case 0x8:	// bltzal
-				if ( (((int)0)|regs[OPREGS(opcode)]) < 0 ) {
-					dest = regs[36]+4+(EXTEND16(OPIMM16(opcode))*4);
+				if ( (((int)0)|rv) < 0 ) {
+					dest = regs[PS_REG_epc]+4+(EXTEND16(OPIMM16(opcode))*4);
 				} else {
 					dest += 4;
 				}
 				break;
 			case 0x9:	// bgezal
-				if ( (((int)0)|regs[OPREGS(opcode)]) >= 0 ) {
-					dest = regs[36]+4+(EXTEND16(OPIMM16(opcode))*4);
+				if ( (((int)0)|rv) >= 0 ) {
+					dest = regs[PS_REG_epc]+4+(EXTEND16(OPIMM16(opcode))*4);
 				} else {
 					dest += 4;
 				}
@@ -533,15 +543,27 @@ unsigned int mips_GetNextPc(unsigned int *regs, int stepover) {
 			
 		} else {
 			
-			dest = (regs[36]&0xf0000000)|(OPIMM26(opcode)*4);
+			dest = (regs[PS_REG_epc]&0xf0000000)|(OPIMM26(opcode)*4);
 			
 		}
 		
 	} else if( OPCODE1(opcode) == 4 ) {	// beq
 		
-		if( regs[OPREGS(opcode)] == regs[OPREGT(opcode)] ) {
+		if( OPREGS(opcode) == 0 ) {
+			rv = 0;
+		} else {
+			rv = regs[OPREGS(opcode)-1];
+		}
+		
+		if( OPREGT(opcode) == 0 ) {
+			rt = 0;
+		} else {
+			rt = regs[OPREGT(opcode)-1];
+		}
+		
+		if( rv == rt ) {
 
-			dest = regs[36]+4+(EXTEND16(OPIMM16(opcode))*4);
+			dest = regs[PS_REG_epc]+4+(EXTEND16(OPIMM16(opcode))*4);
 		
 		} else {
 			
@@ -551,9 +573,21 @@ unsigned int mips_GetNextPc(unsigned int *regs, int stepover) {
 		
 	} else if( OPCODE1(opcode) == 5 ) {	// bne
 		
-		if( regs[OPREGS(opcode)] != regs[OPREGT(opcode)] ) {
+		if( OPREGS(opcode) == 0 ) {
+			rv = 0;
+		} else {
+			rv = regs[OPREGS(opcode)-1];
+		}
+		
+		if( OPREGT(opcode) == 0 ) {
+			rt = 0;
+		} else {
+			rt = regs[OPREGT(opcode)-1];
+		}
+		
+		if( rv != rt ) {
 
-			dest = regs[36]+4+(EXTEND16(OPIMM16(opcode))*4);
+			dest = regs[PS_REG_epc]+4+(EXTEND16(OPIMM16(opcode))*4);
 
 		} else {
 
@@ -563,9 +597,15 @@ unsigned int mips_GetNextPc(unsigned int *regs, int stepover) {
 		
 	} else if( OPCODE1(opcode) == 6 ) {	// blez
 		
-		if( (((int)0)|regs[OPREGS(opcode)]) <= 0 ) {
+		if( OPREGS(opcode) == 0 ) {
+			rv = 0;
+		} else {
+			rv = regs[OPREGS(opcode)-1];
+		}
+		
+		if( (((int)0)|rv) <= 0 ) {
 
-			dest = regs[36]+4+(EXTEND16(OPIMM16(opcode))*4);
+			dest = regs[PS_REG_epc]+4+(EXTEND16(OPIMM16(opcode))*4);
 
 		} else {
 
@@ -575,9 +615,15 @@ unsigned int mips_GetNextPc(unsigned int *regs, int stepover) {
 		
 	} else if( OPCODE1(opcode) == 7 ) {	// bgtz
 		
-		if( (((int)0)|regs[OPREGS(opcode)]) > 0 ) {
+		if( OPREGS(opcode) == 0 ) {
+			rv = 0;
+		} else {
+			rv = regs[OPREGS(opcode)-1];
+		}
+		
+		if( (((int)0)|rv) > 0 ) {
 
-			dest = regs[36]+4+(EXTEND16(OPIMM16(opcode))*4);
+			dest = regs[PS_REG_epc]+4+(EXTEND16(OPIMM16(opcode))*4);
 
 		} else {
 

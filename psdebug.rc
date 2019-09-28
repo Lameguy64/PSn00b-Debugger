@@ -1,8 +1,8 @@
 id ICON "icons/psdebug.ico"
 1 VERSIONINFO
 
-FILEVERSION     0,0,0,0
-PRODUCTVERSION  0,0,0,0
+FILEVERSION     0,0,3,0
+PRODUCTVERSION  0,0,3,0
 
 BEGIN
   BLOCK "StringFileInfo"
@@ -10,13 +10,13 @@ BEGIN
     BLOCK "040904E4"
     BEGIN
       VALUE "CompanyName", "Meido-Tek Productions"
-      VALUE "FileDescription", "Homebrew Debugger for the Sony PlayStation"
-      VALUE "FileVersion", "0.10a"
+      VALUE "FileDescription", "Open source debugger for the Sony PlayStation"
+      VALUE "FileVersion", "0.0.3.0"
       VALUE "InternalName", "psdebug"
       VALUE "LegalCopyright", "GNU General Public License v2"
       VALUE "OriginalFilename", "psdebug.exe"
-      VALUE "ProductName", "PSn00b Debugger"
-      VALUE "ProductVersion", "0.10a"
+      VALUE "ProductName", "PSn00bDEBUG"
+      VALUE "ProductVersion", "0.30b"
     END
   END
   BLOCK "VarFileInfo"

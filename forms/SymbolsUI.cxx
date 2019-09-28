@@ -42,5 +42,6 @@ this->when(FL_WHEN_RELEASE);
   symbolsTable->end();
   Fl_Group::current()->resizable(symbolsTable);
 } // Fl_Symbol_Table* symbolsTable
+xclass("psdebug.symbols");
 end();
 }

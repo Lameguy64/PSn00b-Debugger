@@ -30,6 +30,35 @@ extern ConfigClass config;
 extern CommsClass comms;
 extern RemoteMemClass data_mem;
 
+char *getword(char *s, char *temp) {
+	
+	while( *s == ' ' )
+		s++;
+	
+	char *p = strchr(s, ' ');
+	
+	if( p > s ) {
+		
+		s = p;
+		while( *s == ' ' )
+			s++;
+		
+		char *p = strchr(s, ' ');
+		
+		if( p > s ) {
+			strncpy(temp, s, (size_t)(p-s));
+		} else {
+			strcpy(temp, s);
+		}
+		
+		return temp;
+		
+	}
+	
+	return 0;
+	
+}
+
 Fl_MemoryView::Fl_MemoryView(int x, int y, int w, int h, const char* l) 
 	: Fl_Group(x, y, w, h, l) {
 	
@@ -37,6 +66,7 @@ Fl_MemoryView::Fl_MemoryView(int x, int y, int w, int h, const char* l)
 	
 	scroll_pos = 0x80000000>>3;
 	cursor_pos = 0x80000000>>3;
+	cursor_wpos = 0;
 	
 	hex_mode = 0;
 	
@@ -200,6 +230,7 @@ void Fl_MemoryView::draw() {
 		int ty=line_height*i;
 		char text[128];
 		char temp[32];
+		char temp2[32];
 		
 		sprintf( text, "%08X: ", (scroll_pos+i)<<3 );
 		
@@ -311,7 +342,6 @@ void Fl_MemoryView::draw() {
 			}
 			
 		}
-		
 
 		if ( (scroll_pos+i) == cursor_pos ) {
 			

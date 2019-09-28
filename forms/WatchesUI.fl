@@ -1,0 +1,118 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0304
+header_name {.h}
+code_name {.cxx}
+widget_class WatchesUI {
+  label Watches open
+  xywh {741 299 400 150} type Double resizable
+  class Fl_Double_Window xclass {psdebug.watch} visible
+} {
+  Fl_Table watchTable {
+    label Watches
+    callback cb_WatchTable open
+    xywh {5 20 390 125} labelsize 12 align 5 resizable
+    code0 {\#include "Fl_WatchTable.h"}
+    class Fl_WatchTable
+  } {}
+  Fl_Group {} {open
+    xywh {5 5 390 15}
+  } {
+    Fl_Button updateButton {
+      label Update
+      callback cb_WatchUpdate
+      xywh {345 5 50 15} labelsize 10
+    }
+    Fl_Group {} {open
+      xywh {5 5 15 15} resizable
+    } {}
+  }
+}
+
+widget_class DataBreakUI {
+  label {Data Breakpoint} open
+  xywh {461 433 285 150} type Double
+  class Fl_Double_Window modal xclass {psdebug.breakprompt} visible
+} {
+  Fl_Input breakAddrInput {
+    label {Address/Symbol Name}
+    xywh {10 25 175 21} labelsize 12 align 5 textsize 12 hotspot
+  }
+  Fl_Input breakMaskInput {
+    label {Address Mask}
+    xywh {10 66 175 21} labelsize 12 align 5 textsize 12
+  }
+  Fl_Group {} {
+    label {Break on} open
+    xywh {10 107 175 33} box ENGRAVED_BOX labelsize 12 align 5
+  } {
+    Fl_Check_Button readToggle {
+      label Read
+      xywh {15 115 79 15} down_box DOWN_BOX labelsize 12
+    }
+    Fl_Check_Button writeToggle {
+      label Write
+      xywh {99 115 79 15} down_box DOWN_BOX labelsize 12
+    }
+  }
+  Fl_Button {} {
+    label {Clear point}
+    callback cb_BreakClear
+    xywh {195 53 80 21} labelsize 12
+  }
+  Fl_Return_Button {} {
+    label {Set point}
+    callback cb_BreakSet
+    xywh {195 25 80 21} labelsize 12
+  }
+  Fl_Button {} {
+    label Cancel
+    callback cb_BreakCancel
+    xywh {195 81 80 21} labelsize 12
+  }
+}
+
+widget_class SetWatchUI {
+  label {Add Watch} open
+  xywh {379 387 285 120} type Double
+  class Fl_Double_Window modal xclass {psdebug.watchprompt} visible
+} {
+  Fl_Input addrInput {
+    label {Address/Symbol Name}
+    xywh {10 25 175 21} labelsize 12 align 5 textsize 12 hotspot
+  }
+  Fl_Choice typeChoice {
+    label Type open
+    xywh {10 66 175 20} down_box BORDER_BOX labelsize 12 align 5 textsize 12
+  } {
+    MenuItem {} {
+      label {char (1 byte)}
+      xywh {0 0 30 20} labelsize 12
+    }
+    MenuItem {} {
+      label {short (2 bytes)}
+      xywh {0 0 30 20} labelsize 12
+    }
+    MenuItem {} {
+      label {int (4 bytes)}
+      xywh {0 0 30 20} labelsize 12
+    }
+  }
+  Fl_Check_Button unsignedCheck {
+    label Unsigned
+    xywh {10 91 80 15} down_box DOWN_BOX labelsize 12
+  }
+  Fl_Check_Button hexCheck {
+    label Hex
+    xywh {95 91 50 15} down_box DOWN_BOX labelsize 12
+  }
+  Fl_Return_Button {} {
+    label Okay
+    callback cb_WatchOkay
+    xywh {195 25 80 21} labelsize 12
+  }
+  Fl_Button {} {
+    label Cancel
+    callback cb_WatchCancel
+    xywh {195 53 80 21} labelsize 12
+  }
+}

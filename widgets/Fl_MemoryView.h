@@ -50,6 +50,7 @@ private:
 	void scroll_fix();
 	
 	unsigned int cursor_pos;
+	int cursor_wpos;
 	int hex_mode;
 	
 	Fl_Font _font_index;

@@ -26,6 +26,14 @@ public:
 		_font_size = newSize;
 	}
 	
+	Fl_Font textfont(void) {
+		return _font_index;
+	}
+	
+	Fl_Fontsize textsize(void) {
+		return _font_size;
+	}
+	
 	enum {
 		rzero=0, rat,rv0,rv1,
 		ra0,ra1,ra2,ra3,
@@ -44,8 +52,8 @@ public:
 	
 private:
 	
-	unsigned int _reg_last_values[38];
-	unsigned int _reg_values[38];
+	unsigned int _reg_last_values[41];
+	unsigned int _reg_values[41];
 	
 	Fl_Font _font_index;
 	Fl_Fontsize _font_size;

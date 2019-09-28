@@ -53,5 +53,7 @@ this->when(FL_WHEN_RELEASE);
   o->labelsize(12);
   o->callback((Fl_Callback*)cb_MemDumpGo);
 } // Fl_Return_Button* o
+set_modal();
+xclass("psdebug.dump");
 end();
 }

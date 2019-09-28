@@ -44,7 +44,7 @@ this->when(FL_WHEN_RELEASE);
   o->labelsize(12);
   o->callback((Fl_Callback*)cb_Cancel);
 } // Fl_Button* o
-{ Fl_Tabs* o = new Fl_Tabs(10, 10, 385, 200);
+{ Fl_Tabs* o = new Fl_Tabs(10, 10, 380, 200);
   { Fl_Group* o = new Fl_Group(10, 30, 380, 180, "General");
     o->labelsize(12);
     { loadSymbolsCheck = new Fl_Check_Button(20, 40, 365, 15, "Always load symbols file when selecting PS-EXE");
@@ -52,22 +52,66 @@ this->when(FL_WHEN_RELEASE);
       loadSymbolsCheck->down_box(FL_DOWN_BOX);
       loadSymbolsCheck->labelsize(12);
     } // Fl_Check_Button* loadSymbolsCheck
-    { autoMinimizeCheck = new Fl_Check_Button(20, 60, 365, 15, "Auto minimize child windows");
+    { autoMinimizeCheck = new Fl_Check_Button(20, 60, 365, 15, "Automatically minimize child windows");
       autoMinimizeCheck->tooltip("Minimize child windows when main window is minimized.");
       autoMinimizeCheck->down_box(FL_DOWN_BOX);
       autoMinimizeCheck->labelsize(12);
     } // Fl_Check_Button* autoMinimizeCheck
-    { symDissCheck = new Fl_Check_Button(20, 80, 365, 15, "Show Symbol names in disassembler");
-      symDissCheck->down_box(FL_DOWN_BOX);
-      symDissCheck->labelsize(12);
-    } // Fl_Check_Button* symDissCheck
-    { symMemCheck = new Fl_Check_Button(20, 100, 365, 15, "Show Symbol names in memory browser");
-      symMemCheck->down_box(FL_DOWN_BOX);
-      symMemCheck->labelsize(12);
-    } // Fl_Check_Button* symMemCheck
+    { updateIntValue = new Fl_Spinner(132, 179, 40, 21, "Auto-update Interval");
+      updateIntValue->tooltip("Specifies the update interval in secondsfor  interval update. Fractional valu\
+es are accepted.");
+      updateIntValue->type(1);
+      updateIntValue->labelsize(12);
+      updateIntValue->minimum(0.1);
+      updateIntValue->maximum(10);
+      updateIntValue->step(0.5);
+      updateIntValue->value(0.5);
+      updateIntValue->textsize(12);
+    } // Fl_Spinner* updateIntValue
     o->end();
   } // Fl_Group* o
-  { Fl_Group* o = new Fl_Group(10, 30, 380, 180, "Comms");
+  { Fl_Group* o = new Fl_Group(10, 30, 380, 180, "Fonts");
+    o->labelsize(12);
+    o->hide();
+    { Fl_Group* o = new Fl_Group(20, 55, 360, 35, "Registers");
+      o->box(FL_ENGRAVED_BOX);
+      o->labelsize(12);
+      o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      { regsFontList = new Fl_Choice(56, 60, 229, 25, "Font");
+        regsFontList->down_box(FL_BORDER_BOX);
+        regsFontList->labelsize(12);
+        regsFontList->textsize(12);
+      } // Fl_Choice* regsFontList
+      { regsFontSize = new Fl_Spinner(318, 60, 57, 25, "Size");
+        regsFontSize->labelsize(12);
+        regsFontSize->minimum(4);
+        regsFontSize->maximum(24);
+        regsFontSize->value(12);
+        regsFontSize->textsize(12);
+      } // Fl_Spinner* regsFontSize
+      o->end();
+    } // Fl_Group* o
+    { Fl_Group* o = new Fl_Group(20, 109, 360, 36, "Disassembly");
+      o->box(FL_ENGRAVED_BOX);
+      o->labelsize(12);
+      o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+      { asmFontList = new Fl_Choice(56, 115, 229, 25, "Font");
+        asmFontList->down_box(FL_BORDER_BOX);
+        asmFontList->labelsize(12);
+        asmFontList->textsize(12);
+      } // Fl_Choice* asmFontList
+      { asmFontSize = new Fl_Spinner(318, 115, 57, 25, "Size");
+        asmFontSize->labelsize(12);
+        asmFontSize->minimum(4);
+        asmFontSize->maximum(24);
+        asmFontSize->value(12);
+        asmFontSize->textsize(12);
+      } // Fl_Spinner* asmFontSize
+      o->end();
+    } // Fl_Group* o
+    o->end();
+  } // Fl_Group* o
+  { Fl_Group* o = new Fl_Group(10, 30, 380, 180, "Communications");
     o->labelsize(12);
     o->hide();
     { Fl_Group* o = new Fl_Group(20, 55, 365, 40, "Communication");
@@ -82,18 +126,19 @@ this->when(FL_WHEN_RELEASE);
     } // Fl_Group* o
     o->end();
   } // Fl_Group* o
-  { Fl_Group* o = new Fl_Group(10, 30, 385, 180, "Debugging");
+  { Fl_Group* o = new Fl_Group(10, 30, 380, 180, "Debugging");
     o->labelsize(12);
+    o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
     o->hide();
-    { bpcBreakToggle = new Fl_Check_Button(20, 40, 365, 15, "Pause program on entrypoint");
-      bpcBreakToggle->tooltip("Pauses the program at its entrypoint.");
+    { bpcBreakToggle = new Fl_Check_Button(20, 40, 365, 15, "Pause program at entrypoint");
+      bpcBreakToggle->tooltip("Sets a breakpoint at the program\'s entrypoint before execution.");
       bpcBreakToggle->down_box(FL_DOWN_BOX);
       bpcBreakToggle->labelsize(12);
     } // Fl_Check_Button* bpcBreakToggle
-    { ramExpEnable = new Fl_Check_Button(20, 60, 215, 15, "Allow RAM expansion browsing");
-      ramExpEnable->tooltip("Allow browsing the contents of expansion region 3 starting at 0x1FA00000 whic\
-h was intented for a RAM expansion cartridge on the Parallel I/O port. Memory \
-registers on the console side may have to be configured first.");
+    { ramExpEnable = new Fl_Check_Button(20, 60, 215, 15, "Expansion RAM access");
+      ramExpEnable->tooltip("Enables access to expansion region 3 starting at 0x1FA00000, intented for a R\
+AM expansion cartridge for the Parallel I/O port. Memory control registers on \
+the console side must be configured first before accessing.");
       ramExpEnable->down_box(FL_DOWN_BOX);
       ramExpEnable->labelsize(12);
       ramExpEnable->callback((Fl_Callback*)cb_SettingsExpToggle);
@@ -104,9 +149,9 @@ registers on the console side may have to be configured first.");
       ramExpSize->textsize(12);
       ramExpSize->deactivate();
     } // Fl_Value_Input* ramExpSize
-    { ram8mbEnable = new Fl_Check_Button(20, 80, 365, 15, "Allow 8MB RAM browsing");
-      ram8mbEnable->tooltip("Allow browsing up to 8MB of RAM instead of 2MB for targets with 8MB of DRAM p\
-resent. If only 2MB is present anything beyond 2MB mirrors the first 2MB.");
+    { ram8mbEnable = new Fl_Check_Button(20, 80, 365, 15, "8MB RAM access");
+      ram8mbEnable->tooltip("Enables access beyond the 2MB of RAM for consoles with 8MB equipped. If conso\
+le does not have 8MB the first 2MB is mirrored.");
       ram8mbEnable->down_box(FL_DOWN_BOX);
       ram8mbEnable->labelsize(12);
     } // Fl_Check_Button* ram8mbEnable
@@ -115,7 +160,6 @@ resent. If only 2MB is present anything beyond 2MB mirrors the first 2MB.");
       o->labelsize(12);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       { patchFileToggle = new Fl_Light_Button(30, 165, 63, 20, "Enable");
-        patchFileToggle->labelsize(12);
         patchFileToggle->callback((Fl_Callback*)cb_SettingsPatchToggle);
       } // Fl_Light_Button* patchFileToggle
       { patchGroup = new Fl_Group(95, 164, 279, 21);
@@ -125,7 +169,6 @@ resent. If only 2MB is present anything beyond 2MB mirrors the first 2MB.");
           patchFileInput->textsize(12);
         } // Fl_Input* patchFileInput
         { Fl_Button* o = new Fl_Button(349, 165, 25, 20, "...");
-          o->labelsize(12);
           o->callback((Fl_Callback*)cb_SettingsBrowsePatch);
         } // Fl_Button* o
         patchGroup->end();

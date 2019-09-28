@@ -3,12 +3,12 @@ version 1.0304
 header_name {.h}
 code_name {.cxx}
 widget_class MainUI {
-  label {PSn00b Debugger} open
-  xywh {594 203 600 600} type Double resizable hotspot
+  label {PSn00b Debugger}
+  xywh {477 170 600 600} type Double resizable hotspot
   code0 {\#include "Main_Window.h"}
   class Main_Window xclass {psdebug.main} visible
 } {
-  Fl_Menu_Bar {} {open selected
+  Fl_Menu_Bar {} {open
     xywh {0 0 600 20}
   } {
     Submenu {} {
@@ -86,9 +86,29 @@ widget_class MainUI {
         xywh {0 0 30 20} shortcut 0xffc4 labelsize 12 divider
       }
       MenuItem {} {
+        label {&Patch Instruction...}
+        callback cb_PatchOpcode
+        xywh {0 0 30 20} shortcut 0xff63 labelsize 12 divider
+      }
+      MenuItem {} {
         label {&Debugger Settings...}
         callback cb_DebugSettings
         xywh {0 0 30 20} labelsize 12
+      }
+    }
+    Submenu {} {
+      label {&View} open
+      xywh {0 0 70 20} labelsize 12
+    } {
+      MenuItem updateToggle {
+        label {Interval Update}
+        callback cb_AutoUpdate
+        xywh {0 0 30 20} type Toggle labelsize 12
+      }
+      MenuItem symbolsToggle {
+        label {&Symbol Names}
+        callback cb_SymbolsToggle
+        xywh {0 0 36 20} type Toggle labelsize 12
       }
     }
     Submenu {} {
@@ -118,6 +138,11 @@ widget_class MainUI {
       MenuItem {} {
         label {&Memory...}
         callback cb_MemoryView
+        xywh {0 0 30 20} labelsize 12
+      }
+      MenuItem {} {
+        label {&Watchpoints...}
+        callback cb_WatchView
         xywh {0 0 30 20} labelsize 12
       }
     }
@@ -247,8 +272,8 @@ widget_class MainUI {
 }
 
 widget_class ProgressUI {
-  label Progress open
-  xywh {8 30 300 100} type Double
+  label Progress
+  xywh {1087 425 300 100} type Double
   class Fl_Double_Window modal xclass {psdebug.progress} visible
 } {
   Fl_Group {} {open
@@ -270,8 +295,8 @@ widget_class ProgressUI {
 
 widget_class AddressUI {
   label {Goto Address} open
-  xywh {8 30 327 64} type Double
-  class Fl_Double_Window modal visible
+  xywh {129 390 325 60} type Double
+  class Fl_Double_Window modal xclass {psdebug.prompt} visible
 } {
   Fl_Input addressInput {
     xywh {10 34 230 21} labelsize 12 align 5 textsize 12
@@ -286,8 +311,37 @@ widget_class AddressUI {
     callback cb_AddressCancel
     xywh {250 35 68 20} labelsize 12
   }
-  Fl_Box {} {
-    label {Enter address, register or symbol name:}
+  Fl_Box promptLabel {
+    label {Enter address, register or symbol:}
     xywh {10 10 230 16} labelsize 12 align 20
+  }
+}
+
+widget_class OpcodeUI {
+  label {Insert Instruction} open
+  xywh {572 421 325 100} type Double
+  class Fl_Double_Window modal xclass {psdebug.opcode} visible
+} {
+  Fl_Box {} {
+    label {Enter MIPS op-code in hex:}
+    xywh {10 10 210 16} labelsize 12 align 20
+  }
+  Fl_Input opcodeInput {
+    callback cb_OpcodeInput
+    xywh {10 31 224 21} labelsize 12 when 1 textsize 12
+  }
+  Fl_Return_Button {} {
+    label Write
+    callback cb_OpcodeWrite
+    xywh {247 10 68 20} labelsize 12
+  }
+  Fl_Button {} {
+    label Cancel
+    callback cb_OpcodeCancel
+    xywh {247 35 68 20} labelsize 12
+  }
+  Fl_Output opcode {
+    label {Decoded instruction} selected
+    xywh {10 69 224 21} labelsize 12 align 5 textsize 12
   }
 }

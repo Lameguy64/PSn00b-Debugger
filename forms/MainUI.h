@@ -17,12 +17,16 @@ extern void cb_DumpMemory(Fl_Menu_*, void*);
 extern void cb_ContinueM(Fl_Menu_*, void*);
 extern void cb_StepOverM(Fl_Menu_*, void*);
 extern void cb_StepM(Fl_Menu_*, void*);
+extern void cb_PatchOpcode(Fl_Menu_*, void*);
 extern void cb_DebugSettings(Fl_Menu_*, void*);
+extern void cb_AutoUpdate(Fl_Menu_*, void*);
+extern void cb_SymbolsToggle(Fl_Menu_*, void*);
 extern void cb_MessageWindow(Fl_Menu_*, void*);
 extern void cb_SourceCode(Fl_Menu_*, void*);
 extern void cb_Symbols(Fl_Menu_*, void*);
 extern void cb_Bookmarks(Fl_Menu_*, void*);
 extern void cb_MemoryView(Fl_Menu_*, void*);
+extern void cb_WatchView(Fl_Menu_*, void*);
 extern void cb_About(Fl_Menu_*, void*);
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Button.H>
@@ -52,6 +56,8 @@ public:
   MainUI(int W, int H, const char *L = 0);
   MainUI();
   static Fl_Menu_Item menu_[];
+  static Fl_Menu_Item *updateToggle;
+  static Fl_Menu_Item *symbolsToggle;
   Fl_Group *execControls;
   Fl_Button *stopButton;
   Fl_Button *stepButton;
@@ -97,5 +103,20 @@ public:
   AddressUI(int W, int H, const char *L = 0);
   AddressUI();
   Fl_Input *addressInput;
+  Fl_Box *promptLabel;
+};
+extern void cb_OpcodeInput(Fl_Input*, void*);
+extern void cb_OpcodeWrite(Fl_Return_Button*, void*);
+extern void cb_OpcodeCancel(Fl_Button*, void*);
+#include <FL/Fl_Output.H>
+
+class OpcodeUI : public Fl_Double_Window {
+  void _OpcodeUI();
+public:
+  OpcodeUI(int X, int Y, int W, int H, const char *L = 0);
+  OpcodeUI(int W, int H, const char *L = 0);
+  OpcodeUI();
+  Fl_Input *opcodeInput;
+  Fl_Output *opcode;
 };
 #endif

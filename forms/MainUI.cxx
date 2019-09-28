@@ -20,7 +20,12 @@ Fl_Menu_Item MainUI::menu_[] = {
  {"&Run", 0xffc6,  (Fl_Callback*)cb_ContinueM, 0, 0, (uchar)FL_NORMAL_LABEL, 0, 12, 0},
  {"Step &Over", 0xffc5,  (Fl_Callback*)cb_StepOverM, 0, 0, (uchar)FL_NORMAL_LABEL, 0, 12, 0},
  {"&Step", 0xffc4,  (Fl_Callback*)cb_StepM, 0, 128, (uchar)FL_NORMAL_LABEL, 0, 12, 0},
+ {"&Patch Instruction...", 0xff63,  (Fl_Callback*)cb_PatchOpcode, 0, 128, (uchar)FL_NORMAL_LABEL, 0, 12, 0},
  {"&Debugger Settings...", 0,  (Fl_Callback*)cb_DebugSettings, 0, 0, (uchar)FL_NORMAL_LABEL, 0, 12, 0},
+ {0,0,0,0,0,0,0,0,0},
+ {"&View", 0,  0, 0, 64, (uchar)FL_NORMAL_LABEL, 0, 12, 0},
+ {"Interval Update", 0,  (Fl_Callback*)cb_AutoUpdate, 0, 2, (uchar)FL_NORMAL_LABEL, 0, 12, 0},
+ {"&Symbol Names", 0,  (Fl_Callback*)cb_SymbolsToggle, 0, 2, (uchar)FL_NORMAL_LABEL, 0, 12, 0},
  {0,0,0,0,0,0,0,0,0},
  {"&Window", 0,  0, 0, 64, (uchar)FL_NORMAL_LABEL, 0, 12, 0},
  {"&Message Window...", 0,  (Fl_Callback*)cb_MessageWindow, 0, 0, (uchar)FL_NORMAL_LABEL, 0, 12, 0},
@@ -28,10 +33,13 @@ Fl_Menu_Item MainUI::menu_[] = {
  {"S&ymbols...", 0,  (Fl_Callback*)cb_Symbols, 0, 0, (uchar)FL_NORMAL_LABEL, 0, 12, 0},
  {"&Bookmarks...", 0,  (Fl_Callback*)cb_Bookmarks, 0, 0, (uchar)FL_NORMAL_LABEL, 0, 12, 0},
  {"&Memory...", 0,  (Fl_Callback*)cb_MemoryView, 0, 0, (uchar)FL_NORMAL_LABEL, 0, 12, 0},
+ {"&Watchpoints...", 0,  (Fl_Callback*)cb_WatchView, 0, 0, (uchar)FL_NORMAL_LABEL, 0, 12, 0},
  {0,0,0,0,0,0,0,0,0},
  {"&About", 0,  (Fl_Callback*)cb_About, 0, 0, (uchar)FL_NORMAL_LABEL, 0, 12, 0},
  {0,0,0,0,0,0,0,0,0}
 };
+Fl_Menu_Item* MainUI::updateToggle = MainUI::menu_ + 21;
+Fl_Menu_Item* MainUI::symbolsToggle = MainUI::menu_ + 22;
 
 #include <FL/Fl_Image.H>
 static const unsigned char idata_stop[] =
@@ -1877,7 +1885,7 @@ AddressUI::AddressUI(int W, int H, const char *L)
 }
 
 AddressUI::AddressUI()
-  : Fl_Double_Window(0, 0, 327, 64, "Goto Address") {
+  : Fl_Double_Window(0, 0, 325, 60, "Goto Address") {
   clear_flag(16);
   _AddressUI();
 }
@@ -1906,10 +1914,65 @@ this->when(FL_WHEN_RELEASE);
   o->labelsize(12);
   o->callback((Fl_Callback*)cb_AddressCancel);
 } // Fl_Button* o
-{ Fl_Box* o = new Fl_Box(10, 10, 230, 16, "Enter address, register or symbol name:");
+{ promptLabel = new Fl_Box(10, 10, 230, 16, "Enter address, register or symbol:");
+  promptLabel->labelsize(12);
+  promptLabel->align(Fl_Align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE));
+} // Fl_Box* promptLabel
+set_modal();
+xclass("psdebug.prompt");
+end();
+}
+OpcodeUI::OpcodeUI(int X, int Y, int W, int H, const char *L)
+  : Fl_Double_Window(X, Y, W, H, L) {
+  _OpcodeUI();
+}
+
+OpcodeUI::OpcodeUI(int W, int H, const char *L)
+  : Fl_Double_Window(0, 0, W, H, L) {
+  clear_flag(16);
+  _OpcodeUI();
+}
+
+OpcodeUI::OpcodeUI()
+  : Fl_Double_Window(0, 0, 325, 100, "Insert Instruction") {
+  clear_flag(16);
+  _OpcodeUI();
+}
+
+void OpcodeUI::_OpcodeUI() {
+this->box(FL_FLAT_BOX);
+this->color(FL_BACKGROUND_COLOR);
+this->selection_color(FL_BACKGROUND_COLOR);
+this->labeltype(FL_NO_LABEL);
+this->labelfont(0);
+this->labelsize(14);
+this->labelcolor(FL_FOREGROUND_COLOR);
+this->align(Fl_Align(FL_ALIGN_TOP));
+this->when(FL_WHEN_RELEASE);
+{ Fl_Box* o = new Fl_Box(10, 10, 210, 16, "Enter MIPS op-code in hex:");
   o->labelsize(12);
   o->align(Fl_Align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE));
 } // Fl_Box* o
+{ opcodeInput = new Fl_Input(10, 31, 224, 21);
+  opcodeInput->labelsize(12);
+  opcodeInput->textsize(12);
+  opcodeInput->callback((Fl_Callback*)cb_OpcodeInput);
+  opcodeInput->when(FL_WHEN_CHANGED);
+} // Fl_Input* opcodeInput
+{ Fl_Return_Button* o = new Fl_Return_Button(247, 10, 68, 20, "Write");
+  o->labelsize(12);
+  o->callback((Fl_Callback*)cb_OpcodeWrite);
+} // Fl_Return_Button* o
+{ Fl_Button* o = new Fl_Button(247, 35, 68, 20, "Cancel");
+  o->labelsize(12);
+  o->callback((Fl_Callback*)cb_OpcodeCancel);
+} // Fl_Button* o
+{ opcode = new Fl_Output(10, 69, 224, 21, "Decoded instruction");
+  opcode->labelsize(12);
+  opcode->textsize(12);
+  opcode->align(Fl_Align(FL_ALIGN_TOP_LEFT));
+} // Fl_Output* opcode
 set_modal();
+xclass("psdebug.opcode");
 end();
 }

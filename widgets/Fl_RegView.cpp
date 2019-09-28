@@ -11,6 +11,7 @@
 #include <Fl/fl_draw.H>
 #include "Fl_RegView.h"
 #include "mips_disassembler.h"
+#include "pstypes.h"
 
 Fl_RegView::Fl_RegView(int x, int y, int w, int h, const char* l)
 	: Fl_Group(x, y, w, h, l) {
@@ -27,9 +28,9 @@ Fl_RegView::Fl_RegView(int x, int y, int w, int h, const char* l)
 
 void Fl_RegView::UpdateRegs(unsigned int* regs) {
 	
-	memcpy( _reg_last_values, _reg_values, sizeof(unsigned int)*38 );
+	memcpy( _reg_last_values, _reg_values, sizeof(unsigned int)*40 );
 	
-	for( int i=0; i<38; i++ ) {
+	for( int i=0; i<40; i++ ) {
 		_reg_values[i] = regs[i];
 	}
 	
@@ -64,6 +65,14 @@ void Fl_RegView::draw() {
 		"hi", "lo"
 	};
 	
+	const char* cop0_names[] = {
+		"CAUSE ",
+		"STATUS",
+		"BADDR ",
+		"TAR   ",
+		"DCIC  "
+	};
+	
 	Fl_Group::draw();
 	
 	fl_push_clip( x()+2, y()+2, w()-4, h()-4 );
@@ -83,16 +92,30 @@ void Fl_RegView::draw() {
 				break;
 			}
 			
-			sprintf( inst, "%s=%08X ", reg_names[(6*ix)+iy], 
-				_reg_values[(6*ix)+iy] );
-			
-			if( _reg_values[(6*ix)+iy] != _reg_last_values[(6*ix)+iy] ) {
-				fl_color( FL_RED );
+			if(( ix + iy ) == 0 ) {
+				
+				sprintf( inst, "%s=00000000 ", reg_names[0]);
+				fl_color(FL_BLACK);
+				
 			} else {
-				fl_color( FL_BLACK );
+				
+				sprintf( inst, "%s=%08X ", reg_names[(6*ix)+iy], 
+					_reg_values[((6*ix)+iy)-1] );
+					
+				if( _reg_values[((6*ix)+iy)-1] != _reg_last_values[((6*ix)+iy-1)] ) {
+					
+					fl_color(FL_RED);
+					
+				} else {
+					
+					fl_color(FL_BLACK);
+					
+				}
+					
 			}
 			
-			fl_draw( inst, line_x, y()+(line_height*(iy+1))-2 );
+			
+			fl_draw( inst, line_x, y()+(line_height*(iy+1))-1 );
 			
 			fl_measure( inst, tx, ty );
 			line_x += tx;
@@ -101,24 +124,41 @@ void Fl_RegView::draw() {
 		
 	}
 	
-	if( _reg_values[36] != _reg_last_values[36] ) {
-		fl_color( FL_RED );
+	if( _reg_values[PS_REG_epc] != _reg_last_values[PS_REG_epc] ) {
+		fl_color(FL_RED);
 	} else {
-		fl_color( FL_BLACK );
+		fl_color(FL_BLACK);
 	}
-	sprintf( inst, "pc=%08X ", _reg_values[36] );
-	fl_draw( inst, x()+4, y()+(line_height*7)+4 );
-	fl_measure( inst, tx, ty );
+	sprintf(inst, "pc=%08X ", _reg_values[PS_REG_epc]);
+	fl_draw(inst, x()+4, y()+(line_height*7)+4);
+	fl_measure(inst, tx, ty);
 	
-	mips_Decode( _reg_values[37], _reg_values[36], inst );
-	fl_draw( inst, x()+4+tx, y()+(line_height*7)+4 );
+	mips_Decode(_reg_values[PS_REG_opcode], _reg_values[PS_REG_epc], inst);
+	fl_draw(inst, x()+4+tx, y()+(line_height*7)+4);
 	
 	
 	fl_color( FL_BLACK );
-	if( _last_state ) {
-		fl_draw( _last_state, x()+4, y()+(line_height*9)+4 );
+	if(_last_state ) {
+		fl_draw(_last_state, x()+4, y()+(line_height*9)+4 );
 	}
 	
+	
+	// Cop0 registers (for debugging)
+	ty = y()+(line_height*11)+4;
+	for( int i=34; i<=38; i++ ) {
+		
+		sprintf(inst, "%s=%08X ", cop0_names[i-34], _reg_values[i]);
+					
+		if( _reg_values[i] != _reg_last_values[i] ) {
+			fl_color(FL_RED);
+		} else {
+			fl_color(FL_BLACK);
+		}
+		
+		fl_draw(inst, x()+4, ty);
+		ty += line_height;
+		
+	}
 	
 	fl_pop_clip();
 	

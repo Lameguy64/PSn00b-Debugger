@@ -9,6 +9,8 @@ extern void cb_SettingsOkay(Fl_Button*, void*);
 #include <FL/Fl_Tabs.H>
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Check_Button.H>
+#include <FL/Fl_Spinner.H>
+#include <FL/Fl_Choice.H>
 #include <FL/Fl_Input_Choice.H>
 extern void cb_SettingsExpToggle(Fl_Check_Button*, void*);
 #include <FL/Fl_Value_Input.H>
@@ -29,8 +31,11 @@ private:
 public:
   Fl_Check_Button *loadSymbolsCheck;
   Fl_Check_Button *autoMinimizeCheck;
-  Fl_Check_Button *symDissCheck;
-  Fl_Check_Button *symMemCheck;
+  Fl_Spinner *updateIntValue;
+  Fl_Choice *regsFontList;
+  Fl_Spinner *regsFontSize;
+  Fl_Choice *asmFontList;
+  Fl_Spinner *asmFontSize;
   Fl_Input_Choice *serialChoice;
   Fl_Check_Button *bpcBreakToggle;
   Fl_Check_Button *ramExpEnable;

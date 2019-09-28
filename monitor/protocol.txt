@@ -1,0 +1,190 @@
+Control commands:
+
+M_CMD_ping(0xD0): Debugger ping
+
+	Responds with M_ERR_ok, used to ping the debugger if its still responsive.
+	
+M_CMD_info(0xD1): Get monitor info
+
+	Responds with M_ERR_ok, followed by a string of information of the debug
+	monitor.
+	
+M_CMD_pause(0xD2): Pause execution
+
+	Responds with M_EV_pause event on success, and the program should pause.
+	
+M_CMD_resume(0xD3): Resume execution
+
+	Responds with M_ERR_ok on success, and program should continue execution.
+	
+	Responds with M_ERR_nocont if the exception occurred within the debug
+	monitor, as execution cannot be resumed from that.
+
+M_CMD_step(0xD4): Step:
+
+	Responds with M_ERR_ok and steps an instruction once, followed by an
+	M_EV_break event. When stepping through a non sequential instruction
+	such as jump and branch instructions, it will step to either the
+	branch/jump target if the branch condition was met, or past the branch
+	instruction and delay slot.
+
+M_CMD_getregs(0xD5): Get registers.
+
+	Responds with M_ERR_ok followed by 40 4-byte words, first 33 words are
+	CPU registers at-ra (or r1-r31) and lo-hi registers, then 6 words of
+	COP0 registers EPC, CAUSE, STATUS, BADVADDR, TAR and DCIC, followed by
+	the opcode from the EPC address.
+	
+M_CMD_getmem(0xD6): Get memory:
+
+	Arguments:
+		uint32	- Read address
+		uint32	- n bytes to read
+		
+	Responds with M_ERR_ok followed by n bytes from specified address.
+	Values are read with byte load instructions so adhering to memory
+	alignment requirements is not needed.
+	
+M_CMD_getword(0xD7): Get word:
+
+	Arguments:
+		uint8	- Word type
+					0 - byte (1 byte)
+					1 - short (2 bytes)
+					2 - int(4 bytes)
+		uint32	- Read address
+
+	Responds with M_ERR_ok on success, followed by the word. Returned value
+	will always be a 32-bit word regardless of type. Intended for data
+	watchpoints.
+
+	When using short and int word types, memory address must be aligned in
+	multiples of two or four respectively. The monitor does not check the
+	address so an in-monitor exception will occur if you don't abide by the
+	memory alignment.
+
+M_CMD_setreg(0xD8): Set register (not tested yet):
+	
+	Arguments:
+		int8	- Register number (1-31)
+		uint32	- Value to set.
+		
+	Responds with 0xE0 on success, 0xE1 if register number is invalid.
+	
+M_CMD_setword(0xD9): Set word:
+
+	Arguments:
+		uint8	- Word type
+					0 - byte (1 byte)
+					1 - short (2 bytes)
+					2 - word (4 bytes)
+		uint32	- Write address
+		uint32	- Value to set
+	
+	Responds with 0xE0 on success. Word types less than 2 truncates
+	higher bits. An exception event will occur instead of an error code
+	if a bad address was specified.
+	
+	When using short and int word types, memory address must be aligned in
+	multiples of two or four respectively. The monitor does not check the
+	address so an in-monitor exception will occur if you don't abide by the
+	memory alignment.
+
+M_CMD_databreak(0xDA): Data access break:
+
+	Arguments:
+		int8	- Access break flags (bit 0: read, bit 1: write)
+		int32	- Data break address
+		int32	- Data break mask
+
+	Responds with EV_ERR_ok on success, the data breakpoint will take
+	effect when using M_CMD_resume or M_CMD_runto commands.
+
+	The data breakpoint persists when resuming from break triggers. To disable
+	the breakpoint, issue the command with all arguments set to zero.
+
+M_CMD_runto(0xDB): Run to:
+
+	Arguments:
+		int32	- Address to stop execution.
+
+	Sets a breakpoint on specified address and continues execution. Used for
+	Step Over and Step Out operations.
+
+	Responds with M_ERR_ok on success, a M_EV_break event will occur when a
+	breakpoint is triggered. Responds with M_ERR_nocont instead if continue
+	is not possible.
+
+M_CMD_linestep(0xDC): Line step (not yet implemented):
+
+	Arguments:
+		int32	- 'Next line' address.
+
+	A special step command intended for source level debugging. Sets a
+	breakpoint at the specified address and continues execution with trace
+	enabled. If a non sequential instruction is encountered break occurs
+	at the branch target or after branch opcode.
+
+	Responds with M_ERR_ok on success, a M_EV_break event will occur when a
+	breakpoint is triggered. Responds with M_ERR_nocont instead if continue
+	is not possible.
+
+M_CMD_readgte(0xDD): Read GTE (cop2) registers:
+
+	Arguments:
+		int8	- GTE register set (0: data regs, 1: control regs)
+
+	Responds with M_ERR_ok on success, followed by 32 4-byte words from the
+	GTE (or cop2). Values read are either from data or control registers,
+	depending on the register set value.
+
+M_CMD_reboot(0xDF): Soft reboot:
+
+	Responds with M_ERR_ok and soft reboots console by jumping to BIOS ROM.
+	
+
+Event values:
+
+M_EV_start(0xC0): Process start
+
+	Sent when debug monitor receives the first IRQ or breakpoint. The latter
+	is usually at an entrypoint, when a breakpoint address was set at the
+	target program's entrypoint.
+
+M_EV_pause(0xC1): Execution paused
+
+	Sent when a pause command was sent and the monitor has ceased execution.
+	Execution can be resumed with the resume command.
+
+M_EV_except(0xC2): Exception (not resumable)
+
+	Occurs when a CPU exception other than interrupts have occurred, such as
+	a read/write operation with a bad or unaligned address, stray break
+	instructions and invalid opcodes.
+
+M_EV_dbgfail(0xC3): Debugger failure/monitor exception (not resumable)
+
+	Occurs when a CPU exception within the debug monitor occurs, usually
+	caused by bad command arguments resulting in a bad memory access.
+
+M_EV_break(0xC4): Breakpoint Exception
+
+	Occurs when a exception caused by cop0 break exceptions occur. Determining
+	which type of breakpoint occured can be determined by the DCIC register.
+
+
+Error values:
+
+M_ERR_ok(0xE0): Ok response.
+
+M_ERR_invalid(0xE1): Invalid parameters.
+
+M_ERR_nocont(0xE2): Cannot continue execution.
+
+
+Run-time error conditions:
+
+	A response value other than M_ERR_ok should be treated as an error.
+	Additionally, the response value could be a an event value, usually
+	M_EV_dbgfail if a command with bad arguments causes an exception within
+	the monitor program.

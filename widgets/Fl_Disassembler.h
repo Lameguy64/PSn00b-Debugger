@@ -19,26 +19,52 @@ public:
 	void SetPos(unsigned long pos, int scroll);
 	void SetPC(unsigned long pc, int scroll);
 	
+	void ClearPC(void) {
+		
+		show_exec = false;
+		
+	}
+	
 	unsigned int GetPos() {
+		
 		return cursor_pos;
+		
+	}
+	
+	void ShowSymbols(int v) {
+		
+		show_symbols = v;
+		
 	}
 	
 	void textfont(Fl_Font font) {
+	
 		_font_index = font;
+		
 	}
+	
 	void textsize(Fl_Fontsize newSize) {
+	
 		_font_size = newSize;
+		
 	}
-	int textfont() {
+	
+	Fl_Font textfont() {
+	
 		return _font_index;
+		
 	}
-	int textsize() {
+	
+	Fl_Fontsize textsize() {
+	
 		return _font_size;
+		
 	}
 	
 	int handle(int event);
 	void draw();
 	
+	void clear();
 	unsigned int scroll_pos;
 	
 private:
@@ -47,6 +73,8 @@ private:
 	
 	unsigned int cursor_pos;
 	unsigned int exec_pos;
+	int show_exec;
+	int show_symbols;
 	
 	Fl_Font _font_index;
 	Fl_Fontsize _font_size;

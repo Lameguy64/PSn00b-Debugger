@@ -35,6 +35,9 @@ Fl_Disassembler::Fl_Disassembler(int x, int y, int w, int h, const char* l)
 	end();
 	
 	exec_pos = 0x80000000>>2;
+	show_exec = false;
+	show_symbols = false;
+	
 	scroll_pos = 0x80000000>>2;
 	cursor_pos = 0x80000000>>2;
 	
@@ -52,9 +55,9 @@ void Fl_Disassembler::scroll_fix() {
 
 		scroll_pos = cursor_pos-4;
 
-	} else if( scroll_pos+(((h()-4)/line_height)-4) < cursor_pos ) {
+	} else if( scroll_pos+(((h()-line_height-5)/line_height)-4) < cursor_pos ) {
 
-		scroll_pos = cursor_pos-(((h()-4)/line_height)-4);
+		scroll_pos = cursor_pos-(((h()-line_height-5)/line_height)-4);
 
 	}
 	
@@ -70,9 +73,9 @@ int Fl_Disassembler::handle(int event) {
 	switch(event) {
 		case FL_KEYBOARD:
 			
-			if ( Fl::event_key() == FL_Page_Up ) {
+			if( Fl::event_key() == FL_Page_Up ) {
 				
-				cursor_pos -= (h()/line_height)+1;
+				cursor_pos -= ((h()-line_height-5)/line_height)-8;
 				scroll_fix();
 				redraw();
 				
@@ -82,9 +85,9 @@ int Fl_Disassembler::handle(int event) {
 				
 				return 1;
 				
-			} else if ( Fl::event_key() == FL_Page_Down ) {
+			} else if( Fl::event_key() == FL_Page_Down ) {
 				
-				cursor_pos += (h()/line_height)+1;
+				cursor_pos += ((h()-line_height-5)/line_height)-8;
 				scroll_fix();
 				redraw();
 				
@@ -94,7 +97,7 @@ int Fl_Disassembler::handle(int event) {
 				
 				return 1;
 				
-			} else if ( Fl::event_key() == FL_Up ) {
+			} else if( Fl::event_key() == FL_Up ) {
 				
 				if ( cursor_pos > 0 ) {
 					cursor_pos--;
@@ -108,11 +111,27 @@ int Fl_Disassembler::handle(int event) {
 				}
 				return 1;
 				
-			} else if ( Fl::event_key() == FL_Down ) {
+			} else if( Fl::event_key() == FL_Down ) {
 				
 				cursor_pos++;
 				scroll_fix();
 				redraw();
+				
+				if( callback() ) {
+					callback()( this, user_data() );
+				}
+				
+				return 1;
+			
+			} else if( Fl::event_key() == FL_Left ) {
+				
+				if( callback() ) {
+					callback()( this, user_data() );
+				}
+				
+				return 1;
+				
+			} else if( Fl::event_key() == FL_Right ) {
 				
 				if( callback() ) {
 					callback()( this, user_data() );
@@ -239,13 +258,13 @@ void Fl_Disassembler::draw() {
 			
 		}
 		
-		if ( (scroll_pos+i) == exec_pos ) {
+		if( ( (scroll_pos+i) == exec_pos ) && ( show_exec ) ) {
 			
 			fl_draw_box( FL_FLAT_BOX, x()+2, ty+y()+2, w()-4, line_height, FL_YELLOW );
 			
 		}
 
-		if ( (scroll_pos+i) == cursor_pos ) {
+		if( (scroll_pos+i) == cursor_pos ) {
 			
 			fl_draw_box( FL_FLAT_BOX, x()+2, ty+y()+2, w()-4, line_height, 15 );
 			fl_color( fl_contrast( FL_BLACK, 15 ) );
@@ -283,7 +302,7 @@ void Fl_Disassembler::draw() {
 		fl_draw( instrtext, (x()+14)+tw+20, (ty+(y()+line_height))-1 );
 
 		// Draw symbol
-		if( config.show_sym_disassembler ) {
+		if( show_symbols ) {
 			
 			const char* sym_name = project.symbols.FindSymbol( 4*(scroll_pos+i) );
 
@@ -298,9 +317,9 @@ void Fl_Disassembler::draw() {
 	
 	unsigned int dest_addr = mips_GetNextPc( reg_buffer, false );
 	
-	if( ( dest_addr > reg_buffer[36]+4 ) || ( dest_addr < reg_buffer[36] ) ) {
+	if( ( dest_addr > reg_buffer[PS_REG_epc]+4 ) || ( dest_addr < reg_buffer[PS_REG_epc] ) ) {
 		
-		int src_y = (line_height*((reg_buffer[36]>>2)-scroll_pos))+(line_height>>1)+2;
+		int src_y = (line_height*((reg_buffer[PS_REG_epc]>>2)-scroll_pos))+(line_height>>1)+2;
 		int dest_y = (line_height*((dest_addr>>2)-scroll_pos))+(line_height>>1)+2;
 
 		fl_color( FL_BLACK );
@@ -336,11 +355,20 @@ void Fl_Disassembler::SetPC(unsigned long pc, int scroll) {
 	
 	exec_pos = pc>>2;
 	cursor_pos = exec_pos;
+	show_exec = true;
 	
 	if ( scroll ) {
+		
 		scroll_fix();
+		
 	}
 	
 	redraw();
+	
+}
+
+void Fl_Disassembler::clear() {
+	
+	
 	
 }

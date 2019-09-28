@@ -2964,16 +2964,19 @@ this->labelsize(14);
 this->labelcolor(FL_FOREGROUND_COLOR);
 this->align(Fl_Align(FL_ALIGN_TOP));
 this->when(FL_WHEN_RELEASE);
-{ Fl_Box* o = new Fl_Box(10, 125, 380, 32, "The Open Source PlayStation Debugging Tool");
+{ Fl_Box* o = new Fl_Box(10, 125, 380, 32, "The open-source on-hardware PS1 debugger");
+  o->tooltip("Only one of its kind that I\'m aware of...");
   o->box(FL_ENGRAVED_BOX);
   o->labelfont(1);
   o->labelsize(16);
   o->align(Fl_Align(FL_ALIGN_CENTER|FL_ALIGN_INSIDE));
 } // Fl_Box* o
-{ Fl_Box* o = new Fl_Box(10, 167, 380, 134, "By Lameguy64 of Meido-Tek Productions\n\nGreat thanks to nocash for his exten\
-sive documentation of the PlayStation hardware.\n\nThis tool is still a work i\
-n progress. Please report any significat issues to this project\'s Github page\
- at:\nhttps://github.com/Lameguy64/PSn00b-Debugger");
+{ Fl_Box* o = new Fl_Box(10, 167, 380, 134, "By John Wilbert Villamor (Lameguy64) of Meido-Tek Productions.\nDebug patch a\
+ssembled using Kingcom\'s ARMIPS.\n\nThanks to Martin Korth (nocash) for his P\
+SX Specs document.\n\nThis tool is still a work in progress, please report any\
+ major issues to this project\'s Github page at:\nhttps://github.com/lameguy64\
+/psn00b-debugger");
+  o->tooltip("Those who hide my (real) name are full of garbage, regardless...");
   o->box(FL_DOWN_BOX);
   o->labelsize(12);
   o->align(Fl_Align(133|FL_ALIGN_INSIDE));
